@@ -1,13 +1,12 @@
 package com.aman.socialmedia
 
-import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.SignInClient
+import androidx.appcompat.app.AppCompatActivity
+import com.aman.socialmedia.daos.UserDao
+import com.aman.socialmedia.models.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -97,6 +96,11 @@ class SignInActivity : AppCompatActivity() {
 
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if(firebaseUser!=null) {
+
+            val user = User(firebaseUser.uid, firebaseUser.displayName, firebaseUser.photoUrl.toString())
+            val usersDao = UserDao()
+            usersDao.addUser(user)
+
             val mainActivityIntent = Intent(this,MainActivity::class.java)
             startActivity(mainActivityIntent)
             finish()
